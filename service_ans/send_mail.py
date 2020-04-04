@@ -66,6 +66,7 @@ class SendMail:
 
     def sendMail(self, DF):
         try: 
+            print('Enviando email...!')
             ME = Config.ME
             TO = Config.TO
 

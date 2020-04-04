@@ -56,7 +56,7 @@ class ProcessingFileANS:
             datesDir = datesDir.replace('_', '-')
             sql = (f'''SELECT * FROM BENEFICIARIOANS WHERE COMPETENCIA = '{datesDir}' ''')
             DF = read_sql(sql, db.open_connection())
-        
+
         return DF, datesDir
 
 
@@ -155,8 +155,7 @@ class ProcessingFileANS:
                 #print(SQL)
                 SQLString = SQL
                 db.execute(SQL)
-                print('Enviando email...')
-                SendMail().sendMail(DF) #Send mail
+            SendMail().sendMail(DF) #Send mail
         except Exception as e:
             print(SQLString, e)
             db.rollback()
