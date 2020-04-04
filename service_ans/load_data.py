@@ -117,7 +117,7 @@ class ProcessingFileANS:
             DF['DT_NASCIMENTO'] = '20'+DF['DT_NASCIMENTO'].str[6:9]+'-'+DF['DT_NASCIMENTO'].str[3:5]+'-'+DF['DT_NASCIMENTO'].str[0:2]
             DF['DT_CANCELAMENTO'] = '20'+DF['DT_CANCELAMENTO'].str[6:9]+'-'+DF['DT_CANCELAMENTO'].str[3:5]+'-'+DF['DT_CANCELAMENTO'].str[0:2]
             DF['DT_CONTRATACAO'] = '20'+DF['DT_CONTRATACAO'].str[6:9]+'-'+DF['DT_CONTRATACAO'].str[3:5]+'-'+DF['DT_CONTRATACAO'].str[0:2]
-            for i in range(len(DF.head(1))):
+            for i in range(len(DF):
                 BAIRRO = str(DF.BAIRRO[i].replace("'", ''))
                 LOGRADOURO = str(DF.LOGRADOURO[i].replace("'", ''))
                 COMPLEMENTO = str(DF.COMPLEMENTO[i].replace("'", ''))
@@ -174,9 +174,9 @@ class ProcessingFileANS:
                     self.remove_file_xlsx(path)
                 else:
                     print('Competência já existe!')
-
+                    self.remove_file_xlsx(path) #Delete if existis competência in directory 
             else:
-                print('Diretório vazio!')
+                print('Não tem arquivo para processamento!')
             
             
         except Exception as e:
