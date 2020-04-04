@@ -1,0 +1,20 @@
+{
+    "db_config":{
+        "host":"192.168.15.246",
+        "domain": "ODONTOSYSTEM",
+        "user":"valclemir",
+        "password":"q1w2e3r4",
+        "database":"analise"
+    
+    },
+    "mail_config":{
+        "ME": "valclemir15@hotmail.com",
+        "TO": "jose.valclemir@odontosystem.com.br"
+    },
+    "ftp_config":{
+        "host": "ftpweb.odontosystem.com.br",
+        "user": "ansimportador",
+        "password": "Ans@2020",
+        "local_folder_download": "repository"
+    }
+}
