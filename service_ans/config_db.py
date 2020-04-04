@@ -14,6 +14,8 @@ class Config:
     db_name = config['db_config']['database']
 
     # Mail config 
+    host_mail = config['mail_config']['host']
+    port_mail = config['mail_config']['port']
     ME = config['mail_config']['ME']
     TO = config['mail_config']['TO']
 

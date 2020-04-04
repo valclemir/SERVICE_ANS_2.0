@@ -8,6 +8,8 @@
     
     },
     "mail_config":{
+        "host": "smtp.gmail.com",
+        "port": "587",
         "ME": "valclemir15@hotmail.com",
         "TO": "jose.valclemir@odontosystem.com.br"
     },

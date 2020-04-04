@@ -1,5 +1,5 @@
 from connection import Database
-from pandas import read_excel, read_sql 
+from pandas import read_excel, read_sql, DataFrame
 import os 
 from config_db import Config
 import datetime 
@@ -10,52 +10,68 @@ db = Database(Config)
 
 class ProcessingFileANS:
 
-    def downloadFile(self):        
-        ftp = FTP(Config.ftp_host)
-        ftp.login(user=Config.ftp_user, passwd=Config.ftp_password)
-        
-        listing = []
-        ftp.retrlines("LIST", listing.append)
-        words = listing[0].split(None, 8)
-        filename = words[-1].lstrip()
-        # download the file to folder repository
-        local_filename = os.path.join(Config.ftp_folder, filename)
-        lf = open(local_filename, "wb")
-        ftp.retrbinary("RETR " + filename, lf.write, 8*1024)
-        ftp.delete(filename) #delete file
-        lf.close()
+    def downloadFile(self):       
+        try:  
+            ftp = FTP(Config.ftp_host)
+            ftp.login(user=Config.ftp_user, passwd=Config.ftp_password)
+            
+            listing = []
+            ftp.retrlines("LIST", listing.append)
+            words = listing[0].split(None, 8)
+            filename = words[-1].lstrip()
+            # download the file to folder repository
+            local_filename = os.path.join(Config.ftp_folder, filename)
+            lf = open(local_filename, "wb")
+            ftp.retrbinary("RETR " + filename, lf.write, 8*1024)
+            ftp.delete(filename) #delete file
+            lf.close()
+        except Exception as e:
+            print(e)
 
 
-    def get_date(self, path):
-        listdir = os.listdir(path)
-        i = listdir[-1]
-        datesDir = i[13:20]+'-01'
-        datesDir = datesDir.replace('_', '-')
-        return datesDir
-
-
+    
     def remove_file_xlsx(self, path):
-        if os.name == 'nt':
-            bar = '\\'
-        elif os.name == 'posix':
-            bar = '/'
+        try: 
+            if os.name == 'nt':
+                bar = '\\'
+            elif os.name == 'posix':
+                bar = '/'
+            listdir = os.listdir(path)
+            path = path+bar+listdir[-1]
+            for root, dirs, files in os.walk(path):
+                path = root+bar+''.join(files)
+            os.remove(path)
+        except Exception as e:
+            print(e)
+
+
+    def check_competencia(self, path): 
+        DF = None 
         listdir = os.listdir(path)
-        path = path+bar+listdir[-1]
-        for root, dirs, files in os.walk(path):
-            path = root+bar+''.join(files)
-        os.remove(path)
+        datesDir = None 
+        if len(listdir) != 0:
+            i = listdir[-1]
+            datesDir = i[13:20]+'-01'
+            datesDir = datesDir.replace('_', '-')
+            sql = (f'''SELECT * FROM BENEFICIARIOANS WHERE COMPETENCIA = '{datesDir}' ''')
+            DF = read_sql(sql, db.open_connection())
+        
+        return DF, datesDir
 
 
     def read_data_excel(self, path):
-        if os.name == 'nt':
-            bar = '\\'
-        elif os.name == 'posix':
-            bar = '/'
-        listdir = os.listdir(path)
-        path = path+bar+listdir[-1]
-        for root, dirs, files in os.walk(path):
-            path = root+bar+''.join(files)
-        return read_excel(path)
+        try: 
+            if os.name == 'nt':
+                bar = '\\'
+            elif os.name == 'posix':
+                bar = '/'
+            listdir = os.listdir(path)
+            path = path+bar+listdir[-1]
+            for root, dirs, files in os.walk(path):
+                path = root+bar+''.join(files)
+            return read_excel(path)
+        except Exception as e:
+            print(e)
         
 
     def insert_table_beneficiarioans(self, DF, path):
@@ -69,7 +85,7 @@ class ProcessingFileANS:
 
             last_month = datetime.date(predecessor_year, predecessor_month, day)"""
 
-            datesDir = self.get_date(path)
+            datesDir = self.check_competencia(path)[1]
 
             DF['COMPETENCIA'] = datesDir
             DF['BENEFICIARIO_ID'] = DF.index
@@ -150,18 +166,17 @@ class ProcessingFileANS:
 
     def DoStart(self, path):
         try:
-            #get date filename and check if exists competencia 
-            print(path)
-            datesDir = self.get_date(path)
-            print(datesDir)
-            sql = (f'''SELECT * FROM BENEFICIARIOANS WHERE COMPETENCIA = '{datesDir}' ''')
-            DF = read_sql(sql, db.open_connection())
-            
-            if DF.empty:
-                self.insert_table_beneficiarioans(self.read_data_excel(path), path)
-                self.remove_file_xlsx(path)
+            if self.check_competencia(path)[0] is not None:
+                if self.check_competencia(path)[0].empty:                    
+                    self.insert_table_beneficiarioans(self.read_data_excel(path), path)
+                    self.remove_file_xlsx(path)
+                else:
+                    print('Competência já existe!')
+
             else:
-                print('Competencia já existe!')
+                print('Diretório vazio!')
+            
+            
         except Exception as e:
             print(e)
 

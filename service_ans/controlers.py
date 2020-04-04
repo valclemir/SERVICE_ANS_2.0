@@ -10,6 +10,7 @@ def start(path):
       showStartService(path)
    except Exception as e:
       print(e)
+      
    finally:
       endExecution()
       elapsed_time = time.time() - start_time

@@ -64,7 +64,6 @@ class SendMail:
             return TEXT
 
 
-
     def sendMail(self, DF):
         try: 
             ME = Config.ME
@@ -85,7 +84,7 @@ class SendMail:
             msg.attach(BODY)
             # Servidor de envio de email
             #mail = smtplib.SMTP('172.18.88.33', 25) 
-            mail = smtplib.SMTP('smtp.gmail.com: 587')
+            mail = smtplib.SMTP(Config.host_mail, Config.port_mail)
 
             mail.ehlo()
             mail.starttls()
