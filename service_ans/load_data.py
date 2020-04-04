@@ -17,14 +17,15 @@ class ProcessingFileANS:
             
             listing = []
             ftp.retrlines("LIST", listing.append)
-            words = listing[0].split(None, 8)
-            filename = words[-1].lstrip()
-            # download the file to folder repository
-            local_filename = os.path.join(Config.ftp_folder, filename)
-            lf = open(local_filename, "wb")
-            ftp.retrbinary("RETR " + filename, lf.write, 8*1024)
-            ftp.delete(filename) #delete file
-            lf.close()
+            if len(listing) != 0: #File existing to download 
+                words = listing[0].split(None, 8)
+                filename = words[-1].lstrip()
+                # download the file to folder repository
+                local_filename = os.path.join(Config.ftp_folder, filename)
+                lf = open(local_filename, "wb")
+                ftp.retrbinary("RETR " + filename, lf.write, 8*1024)
+                ftp.delete(filename) #delete file
+                lf.close()
         except Exception as e:
             print(e)
 
