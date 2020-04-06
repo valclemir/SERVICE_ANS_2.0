@@ -5,9 +5,11 @@ from config_db import Config
 import datetime 
 from send_mail import SendMail
 from ftplib import FTP
+from log_error import logError
+import pymssql
 
 db = Database(Config)
-
+log = logError()
 class ProcessingFileANS:
 
     def downloadFile(self):       
@@ -27,7 +29,7 @@ class ProcessingFileANS:
                 ftp.delete(filename) #delete file
                 lf.close()
         except Exception as e:
-            print(e)
+            log.insert_log_error(str(e), 'downloadFile')
 
 
     
@@ -43,7 +45,7 @@ class ProcessingFileANS:
                 path = root+bar+''.join(files)
             os.remove(path)
         except Exception as e:
-            print(e)
+            log.insert_log_error(str(e), 'remove_file_xlsx')
 
 
     def check_competencia(self, path): 
@@ -72,23 +74,17 @@ class ProcessingFileANS:
                 path = root+bar+''.join(files)
             return read_excel(path)
         except Exception as e:
-            print(e)
+            log.insert_log_error(str(e), 'read_data_excel')
         
 
     def insert_table_beneficiarioans(self, DF, path):
-
-        SQLString = ''
+        competencia = None 
+        status = None 
         try:
-            """today = datetime.date.today()
-            day = 1
-            predecessor_month = (today.month - 1) % 12
-            predecessor_year = today.year + ((today.month -1) // 12)
-
-            last_month = datetime.date(predecessor_year, predecessor_month, day)"""
-
-            datesDir = self.check_competencia(path)[1]
-
-            DF['COMPETENCIA'] = datesDir
+            status = 1  #File processing completed
+            competencia = self.check_competencia(path)[1]
+            
+            DF['COMPETENCIA'] = competencia
             DF['BENEFICIARIO_ID'] = DF.index
             DF['CONFERENCIA_ID'] = DF.index
 
@@ -152,21 +148,30 @@ class ProcessingFileANS:
                                                     @p_numeroPlanoANS= {DF.NR_PLANO_ANS[i]},
                                                     @p_relacaoDependencia= {DF.REL_DEPEND[i]},
                                                     @p_COMPETENCIA= '{DF.COMPETENCIA[i]}' ''')
-                #print(SQL)
-                SQLString = SQL
+                
                 db.execute(SQL)
             SendMail().sendMail(DF) #Send mail
         except Exception as e:
-            print(SQLString, e)
+            competencia = self.check_competencia(path)[1]
+            status = 3 #error processing the file ANS 
+            log.insert_log_error(str(e), 'insert_table_beneficiarioans')
             db.rollback()
         finally:    
+            self.update_status_processing(status, competencia)
             db.commit()
             db.__disconnect__()
 
 
+    def update_status_processing(self, status, competencia):
+        SQL = (f'''UPDATE BASICUS_TESTE.DBO.Processar_Arquivo_Importacao_ANS
+                    SET situacao = {status}
+                WHERE COMPETENCIA =  RIGHT(CONVERT(VARCHAR(10), CONVERT(DATE, '{competencia}'), 103), 7) ''')
+        db.execute(SQL)
+
+
     def DoStart(self, path):
         try:
-            self.downloadFile()
+            #self.downloadFile()
             if self.check_competencia(path)[0] is not None:
                 if self.check_competencia(path)[0].empty:                    
                     self.insert_table_beneficiarioans(self.read_data_excel(path), path)
@@ -179,7 +184,7 @@ class ProcessingFileANS:
             
             
         except Exception as e:
-            print(e)
+            log.insert_log_error(str(e), 'DoStart')
 
 
 
