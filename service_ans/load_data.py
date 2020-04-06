@@ -171,7 +171,7 @@ class ProcessingFileANS:
 
     def DoStart(self, path):
         try:
-            #self.downloadFile()
+            self.downloadFile()
             if self.check_competencia(path)[0] is not None:
                 if self.check_competencia(path)[0].empty:                    
                     self.insert_table_beneficiarioans(self.read_data_excel(path), path)
