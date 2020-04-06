@@ -81,7 +81,7 @@ class ProcessingFileANS:
         competencia = None 
         status = None 
         try:
-            status = 1  #File processing completed
+            status = 2  #File processing completed
             competencia = self.check_competencia(path)[1]
             
             DF['COMPETENCIA'] = competencia
