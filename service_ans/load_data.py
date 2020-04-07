@@ -56,8 +56,8 @@ class ProcessingFileANS:
             i = listdir[-1]
             datesDir = i[13:20]+'-01'
             datesDir = datesDir.replace('_', '-')
-            sql = (f'''SELECT * FROM BENEFICIARIOANS WHERE COMPETENCIA = '{datesDir}' ''')
-            DF = read_sql(sql, db.open_connection())
+            SQL = (f'''SELECT * FROM BENEFICIARIOANS WHERE COMPETENCIA = '{datesDir}' ''')
+            DF = read_sql(SQL, db.open_connection())
 
         return DF, datesDir
 

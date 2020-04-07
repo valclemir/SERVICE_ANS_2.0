@@ -6,6 +6,8 @@ from config_db import Config
 
 class SendMail:
     def mountHtmlMail(self, DF):
+            competencia = str(DF['COMPETENCIA'].values[0])
+            competencia = competencia[8:10]+'/'+competencia[5:7]+'/'+competencia[:4]
             TEXT = """
                 <!DOCTYPE html>
                         <html>
@@ -43,12 +45,12 @@ class SendMail:
                         <H1 id="titulo">Processamento Arquivo ANS</H1>
                         <table id="ANS">
                         <tr style="background-color: blue;color: white;">
-                            <th>COMPETÊNCIA</th>
-                            <th>LINHAS PROCESSADAS</th>
+                            <th>Competência</th>
+                            <th>Quantidade Beneficiários Importados</th>
                             
                         </tr>
                         <tr>
-                            <td>"""+str(DF['COMPETENCIA'].values[0])+"""</td>
+                            <td>"""+competencia+"""</td>
                             <td>"""+str(DF.shape[0])+"""</td>
                             
                         </tr>
