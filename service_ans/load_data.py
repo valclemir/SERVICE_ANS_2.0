@@ -155,6 +155,7 @@ class ProcessingFileANS:
             competencia = self.check_competencia(path)[1]
             status = 3 #error processing the file ANS 
             log.insert_log_error(str(e), 'insert_table_beneficiarioans')
+            SendMail().sendMail(e) #Send mail
             db.rollback()
         finally:    
             self.update_status_processing(status, competencia)

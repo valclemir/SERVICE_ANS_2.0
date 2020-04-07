@@ -2,10 +2,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from config_db import Config
-
+from pandas import DataFrame
 
 class SendMail:
     def mountHtmlMail(self, DF):
+        if isinstance(DF, DataFrame):
             competencia = str(DF['COMPETENCIA'].values[0])
             competencia = competencia[8:10]+'/'+competencia[5:7]+'/'+competencia[:4]
             TEXT = """
@@ -59,11 +60,17 @@ class SendMail:
 
                         </body>
                         </html>
-
-
-
             """
-            return TEXT
+        else:
+            TEXT = f"""
+                <h4 style="color: red;">ERRO!</h4>
+                <p><strong>Arquivo de conferência não processado. Favor verificar o layout do arquivo enviado e tente novamente.</strong></p>
+                <hr>
+                <!--<p>Descrição do erro: <strong>{DF}</strong></p>-->
+                
+            
+            """
+        return TEXT
 
 
     def sendMail(self, DF):
