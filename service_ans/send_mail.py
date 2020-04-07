@@ -78,12 +78,13 @@ class SendMail:
             print('Enviando email...!')
             ME = Config.ME
             TO = Config.TO
-
+            TO = TO.split(',')
+            
             #Cria um container de menssagem
             msg = MIMEMultipart('alternative')
             msg['Subject'] = "PROCESSAMENTO ARQUIVO ANS"
             msg['From'] = ME
-            msg['To'] = TO
+            msg['To'] = ','.join(TO)
 
             header = "PROCESSAMENTO ARQUIVO ANS"
             # Cria o titulo e corpo HTML
@@ -93,16 +94,15 @@ class SendMail:
             msg.attach(TITLE)
             msg.attach(BODY)
             # Servidor de envio de email
-            #mail = smtplib.SMTP('172.18.88.33', 25) 
+            #mail = smtplib.SMTP('172.18.88.33', 25)
             mail = smtplib.SMTP(Config.host_mail, Config.port_mail)
 
             mail.ehlo()
             mail.starttls()
             mail.mail(ME)
-            mail.login('valclemor@gmail.com', 'heller123')
+            #mail.login('valclemor@gmail.com', 'heller123')
             mail.sendmail(ME, TO, msg.as_string())
             mail.quit()
 
         except Exception as e:
             print(e)
-
