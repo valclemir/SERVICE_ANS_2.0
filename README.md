@@ -1,36 +1,26 @@
-#Serviço De Importação ANS 
+# Serviço De Importação ANS 
 O serviço consiste em fazer a importação do arquivo de beneficiários ANS
 
-Começando
+# Começando
 O serviço funciona tanto em sistemas Windows, quanto em sistemas Unix.
 
-Pre-requisitos
+# Pre-requisitos
 Os pacotes necessários para o funcionamento adequado do serviço são:
-python: apt-get install python3 --ubuntu
+python: apt-get install python3 --ubuntu  yum install python3 #Para dist baseadas em red hat 
 pandas: pip install pandas 
+pymssql: pip install pymssql
+Caso prefira usar o virtualenv, então: 
+     pip3 install virtualenv 
+Criar ambiente virtual:
+     virtualenv -p python3 venv 
 
-
-Give examples
-Installing
-A step by step series of examples that tell you how to get a development env running
-
-Give an example
-And coding style tests
-Explain what these tests test and why
-
-Give an example
-Deployment
-Add additional notes about how to deploy this on a live system
-
-Built With
-Dropwizard - The web framework used
-Maven - Dependency Management
-ROME - Used to generate RSS Feeds
-Contributing
-Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
-
-Versioning
-We use SemVer for versioning. For the versions available, see the tags on this repository.
+# IMPORTANTE 
+ O nome de todos os arquivos .xslx devem está no seguinte formato, exemplo:
+ 
+      ARQ_CONF_ANS_2020_01
+      No exexmplo acima, o arquivo é da competência de janeiro, ficando então: ARQ_CONF_ANS_2020_01
+      
+ Editar o arquivo "config.json" para atender as configurações de autênticação de banco de dados, ftp e e-mail.
 
 Autores
 José Valclemir Rodrigues Da Silva 
