@@ -18,5 +18,6 @@
         "user": "ansimportador",
         "password": "Ans@2020",
         "local_folder_download": "repository"
-    }
+    },
+    "timesleep": 3600
 }
