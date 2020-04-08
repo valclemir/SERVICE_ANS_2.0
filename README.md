@@ -17,6 +17,22 @@ Criar ambiente virtual:
 
     virtualenv -p python3 venv 
 
+# Instalação do serviço no ambiente
+Para instalar o serviço, será necessário seguir os seguintes passos: 
+Passo 1: Dar permissão aos arquivos .sh:
+ 
+     chmod +x install.sh
+Passo 2: Executar o arquivo install.sh:
+   
+     ./install.sh 
+Passo 3: Iniciar o serviço: 
+
+     sudo systemctl start ans 
+     
+Passo 4: Status do serviço: 
+    
+     sudo systemctl status ans 
+     
 # IMPORTANTE 
  O nome de todos os arquivos .xslx devem está no seguinte formato, exemplo:
  
