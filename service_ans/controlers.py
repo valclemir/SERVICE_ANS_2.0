@@ -9,7 +9,7 @@ def start(path):
       showStartService(path)
       endExecution()
       elapsed_time = time.time() - start_time
-      print('Tempo decorrido...: '+str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time))))
+      print('Tempo decorrido...: '+str(time.strftime("%H:%M:%S", time.gmtime(elapsed_time)))+'\n')
    
   
 #'Z:\\ARQUIVOS_ANS'

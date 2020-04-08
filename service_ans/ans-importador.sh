@@ -5,7 +5,7 @@ TIMESLEEP=$(cat /home/suporte/SERVICE_ANS_2.0/service_ans/config.json | jq '.tim
 
 if [[ -e $FILEPY ]]; then 
     while [[ true ]]; do
-        python3 $FILEPY >> $LOGDIR;
+        python3 $FILEPY &> $LOGDIR;
         sleep $TIMESLEEP;
     done;
 else
