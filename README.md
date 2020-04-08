@@ -3,6 +3,22 @@ O serviço consiste em fazer a importação do arquivo de beneficiários ANS
 
 # Começando
 O serviço funciona tanto em sistemas Windows, quanto em sistemas Unix.
+O serviço ficará instalado em um servidor linux: 172.18.88.109
+O serviço utilizará as seguintes objetos de banco de dados, são eles:
+
+    TABELAS: 
+        BANCO DE DADOS: Auditoria
+            BENEFICIARIOANS -> Tabela pricinpal responsavel por armazenar todos os beneficiários ans 
+            REPOSITORIO_LOG_ERRO -> Tabela resposável por guardar a informação de qualquer erro gerado pelo serviço.
+        BANCO DE DADOS: Basicus
+            Processar_Arquivo_Importacao_ANS -> Responsável por guardar a informação de qual arquivo foi processado.
+    PROCEDURES:
+        BANCO DE DADOS: Auditoria 
+            SP_INSERT_BENEFICIARIOANS -> Resposável por processar receber e salvar no banco de dados, a planilha importada pelo serviço.
+            SP_INSERE_LOG_ERRO -> Procedure resposável por inserir os logs na tabela REPOSITORIO_LOG_ERRO.
+        
+    
+     
 
 # Pre-requisitos
 Os pacotes necessários para o funcionamento adequado do serviço são:
