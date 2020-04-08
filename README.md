@@ -10,6 +10,7 @@ Os pacotes necessários para o funcionamento adequado do serviço são:
     python: apt-get install python3 --ubuntu  yum install python3 #Para dist baseadas em red hat 
     pandas: pip install pandas 
     pymssql: pip install pymssql
+    jq: apt-get install jq #Responsavel por ler arquivos json 
 Caso prefira usar o virtualenv, então: 
 
     pip3 install virtualenv 
