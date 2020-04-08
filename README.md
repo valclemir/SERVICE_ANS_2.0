@@ -22,6 +22,7 @@ Para instalar o serviço, será necessário seguir os seguintes passos:
 Passo 1: Dar permissão aos arquivos .sh:
  
      chmod +x install.sh
+     chmod +x ans-importador.sh 
 Passo 2: Executar o arquivo install.sh:
    
      ./install.sh 
